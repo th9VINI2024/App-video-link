@@ -1,6 +1,6 @@
 {
-  "name": "App Video Link",
-  "short_name": "VideoLink",
+  "name": "YouTube",
+  "short_name": "YouTube",
   "description": "Cofre simples para salvar e abrir links de vídeos",
   "start_url": "./index.html",
   "display": "standalone",
