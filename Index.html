@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Cofre de Links</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, Arial, sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
+    }
+
+    .app {
+      max-width: 420px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      font-size: 16px;
+    }
+
+    input {
+      margin-bottom: 10px;
+    }
+
+    button {
+      background: #6366f1;
+      color: white;
+      cursor: pointer;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 20px;
+    }
+
+    li {
+      background: #020617;
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      word-break: break-all;
+    }
+
+    a {
+      color: #818cf8;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app">
+    <h1>🔐 Cofre de Links</h1>
+
+    <input id="link" placeholder="Cole o link aqui">
+    <button onclick="salvar()">Salvar</button>
+
+    <ul id="lista"></ul>
+  </div>
+
+  <script>
+    const lista = document.getElementById("lista");
+    const input = document.getElementById("link");
+
+    let links = JSON.parse(localStorage.getItem("cofreLinks")) || [];
+
+    function salvar() {
+      const url = input.value.trim();
+      if (!url) return;
+
+      links.push(url);
+      localStorage.setItem("cofreLinks", JSON.stringify(links));
+      input.value = "";
+      render();
+    }
+
+    function render() {
+      lista.innerHTML = "";
+      links.forEach(link => {
+        const li = document.createElement("li");
+        li.innerHTML = `<a href="${link}" target="_blank" rel="noopener">${link}</a>`;
+        lista.appendChild(li);
+      });
+    }
+
+    render();
+  </script>
+
+</body>
+</html>
