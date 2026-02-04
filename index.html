@@ -6,7 +6,6 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#ff0000">
-
   <link rel="manifest" href="manifest.json">
 
   <style>
@@ -17,17 +16,59 @@
       color: #fff;
     }
 
+    /* TELA FAKE */
+    .fake {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .logo {
+      color: #ff0000;
+      font-size: 36px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .search-box {
+      width: 80%;
+      max-width: 360px;
+      display: flex;
+    }
+
+    .search-box input {
+      flex: 1;
+      padding: 12px;
+      border-radius: 20px 0 0 20px;
+      border: none;
+      font-size: 16px;
+      outline: none;
+    }
+
+    .search-box button {
+      padding: 12px 16px;
+      border-radius: 0 20px 20px 0;
+      border: none;
+      background: #ff0000;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .msg {
+      margin-top: 12px;
+      color: #aaa;
+      font-size: 14px;
+    }
+
+    /* APP REAL */
     .app {
+      display: none;
       max-width: 420px;
       margin: auto;
       padding: 16px;
-      display: none;
-    }
-
-    h1 {
-      text-align: center;
-      color: #ff0000;
-      margin-bottom: 12px;
     }
 
     input, button {
@@ -47,7 +88,6 @@
     button {
       background: #ff0000;
       color: #fff;
-      cursor: pointer;
       margin-bottom: 12px;
     }
 
@@ -68,58 +108,46 @@
       text-decoration: none;
       display: block;
     }
-
-    /* TELA PIN */
-    .pin {
-      max-width: 300px;
-      margin: 120px auto;
-      text-align: center;
-    }
-
-    .pin h2 {
-      margin-bottom: 12px;
-    }
   </style>
 </head>
 <body>
 
-  <!-- TELA PIN -->
-  <div class="pin" id="pinTela">
-    <h2>YouTube</h2>
-    <input id="pinInput" type="password" placeholder="Digite o PIN">
-    <button onclick="verificarPIN()">Entrar</button>
+  <!-- TELA DISFARÇADA -->
+  <div class="fake" id="fake">
+    <div class="logo">YouTube</div>
+
+    <div class="search-box">
+      <input id="busca" placeholder="Pesquisar">
+      <button onclick="pesquisar()">🔍</button>
+    </div>
+
+    <div class="msg" id="msg"></div>
   </div>
 
-  <!-- APP -->
+  <!-- APP REAL -->
   <div class="app" id="app">
-    <h1>YouTube</h1>
-
     <input id="nome" placeholder="Nome do vídeo">
     <input id="link" placeholder="Cole o link aqui">
     <button onclick="salvar()">Adicionar</button>
-
     <ul id="lista"></ul>
   </div>
 
   <script>
-    // 🔐 PIN
-    const PIN_CORRETO = "1914";
+    const PALAVRA_SECRETA = "BOLSONARO";
 
-    const pinTela = document.getElementById("pinTela");
-    const app = document.getElementById("app");
-    const pinInput = document.getElementById("pinInput");
+    function pesquisar() {
+      const texto = document.getElementById("busca").value.trim().toLowerCase();
+      const msg = document.getElementById("msg");
 
-    function verificarPIN() {
-      if (pinInput.value === PIN_CORRETO) {
-        pinTela.style.display = "none";
-        app.style.display = "block";
+      if (texto === PALAVRA_SECRETA) {
+        document.getElementById("fake").style.display = "none";
+        document.getElementById("app").style.display = "block";
       } else {
-        alert("PIN incorreto");
-        pinInput.value = "";
+        msg.innerText = "Nenhum resultado encontrado";
       }
     }
 
-    // 📦 LINKS
+    // 📦 COFRE DE LINKS
     const lista = document.getElementById("lista");
     const inputLink = document.getElementById("link");
     const inputNome = document.getElementById("nome");
@@ -129,7 +157,6 @@
     function salvar() {
       const url = inputLink.value.trim();
       const nome = inputNome.value.trim();
-
       if (!url || !nome) return;
 
       links.push({ nome, url });
