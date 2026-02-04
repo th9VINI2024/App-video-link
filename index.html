@@ -1,112 +1,127 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#6366f1">
   <meta charset="UTF-8">
-  <title>Cofre de Links</title>
+  <title>YouTube</title>
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#ff0000">
+
+  <link rel="manifest" href="manifest.json">
 
   <style>
     body {
       margin: 0;
       font-family: system-ui, Arial, sans-serif;
-      background: #0f172a;
-      color: #e5e7eb;
+      background: #000;
+      color: #fff;
     }
 
     .app {
       max-width: 420px;
       margin: auto;
-      padding: 20px;
+      padding: 16px;
     }
 
     h1 {
       text-align: center;
-      margin-bottom: 20px;
+      color: #ff0000;
+      margin-bottom: 12px;
     }
 
     input, button {
       width: 100%;
       padding: 12px;
-      border-radius: 10px;
+      border-radius: 8px;
       border: none;
-      font-size: 16px;
+      font-size: 15px;
     }
 
     input {
-      margin-bottom: 10px;
+      margin-bottom: 8px;
+      background: #111;
+      color: #fff;
     }
 
     button {
-      background: #6366f1;
-      color: white;
+      background: #ff0000;
+      color: #fff;
       cursor: pointer;
+      margin-bottom: 12px;
     }
 
     ul {
       list-style: none;
       padding: 0;
-      margin-top: 20px;
     }
 
     li {
-      background: #020617;
+      background: #111;
       padding: 12px;
       border-radius: 10px;
       margin-bottom: 10px;
-      word-break: break-all;
     }
 
     a {
-      color: #818cf8;
+      color: #fff;
       text-decoration: none;
+      font-weight: 500;
+      display: block;
     }
   </style>
 </head>
 <body>
 
   <div class="app">
-    <h1>🔐 Cofre de Links</h1>
+    <h1>YouTube</h1>
 
+    <input id="nome" placeholder="Nome do vídeo">
     <input id="link" placeholder="Cole o link aqui">
-    <button onclick="salvar()">Salvar</button>
+    <button onclick="salvar()">Adicionar</button>
 
     <ul id="lista"></ul>
   </div>
 
   <script>
     const lista = document.getElementById("lista");
-    const input = document.getElementById("link");
+    const inputLink = document.getElementById("link");
+    const inputNome = document.getElementById("nome");
 
     let links = JSON.parse(localStorage.getItem("cofreLinks")) || [];
 
     function salvar() {
-      const url = input.value.trim();
-      if (!url) return;
+      const url = inputLink.value.trim();
+      const nome = inputNome.value.trim();
 
-      links.push(url);
+      if (!url || !nome) return;
+
+      links.push({ nome, url });
       localStorage.setItem("cofreLinks", JSON.stringify(links));
-      input.value = "";
+
+      inputLink.value = "";
+      inputNome.value = "";
       render();
     }
 
     function render() {
       lista.innerHTML = "";
-      links.forEach(link => {
+      links.forEach(item => {
         const li = document.createElement("li");
-        li.innerHTML = `<a href="${link}" target="_blank" rel="noopener">${link}</a>`;
+        li.innerHTML = `
+          <a href="${item.url}" target="_self">
+            ▶ ${item.nome}
+          </a>
+        `;
         lista.appendChild(li);
       });
     }
 
     render();
 
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("./service-worker.js")
-    .then(() => console.log("Service Worker registrado"))
-    .catch(err => console.error("Erro no SW:", err));
-}
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("./service-worker.js")
+        .then(() => console.log("Service Worker registrado"));
+    }
   </script>
 
 </body>
