@@ -21,6 +21,7 @@
       max-width: 420px;
       margin: auto;
       padding: 16px;
+      display: none;
     }
 
     h1 {
@@ -65,14 +66,32 @@
     a {
       color: #fff;
       text-decoration: none;
-      font-weight: 500;
       display: block;
+    }
+
+    /* TELA PIN */
+    .pin {
+      max-width: 300px;
+      margin: 120px auto;
+      text-align: center;
+    }
+
+    .pin h2 {
+      margin-bottom: 12px;
     }
   </style>
 </head>
 <body>
 
-  <div class="app">
+  <!-- TELA PIN -->
+  <div class="pin" id="pinTela">
+    <h2>YouTube</h2>
+    <input id="pinInput" type="password" placeholder="Digite o PIN">
+    <button onclick="verificarPIN()">Entrar</button>
+  </div>
+
+  <!-- APP -->
+  <div class="app" id="app">
     <h1>YouTube</h1>
 
     <input id="nome" placeholder="Nome do vídeo">
@@ -83,6 +102,24 @@
   </div>
 
   <script>
+    // 🔐 PIN
+    const PIN_CORRETO = "1914";
+
+    const pinTela = document.getElementById("pinTela");
+    const app = document.getElementById("app");
+    const pinInput = document.getElementById("pinInput");
+
+    function verificarPIN() {
+      if (pinInput.value === PIN_CORRETO) {
+        pinTela.style.display = "none";
+        app.style.display = "block";
+      } else {
+        alert("PIN incorreto");
+        pinInput.value = "";
+      }
+    }
+
+    // 📦 LINKS
     const lista = document.getElementById("lista");
     const inputLink = document.getElementById("link");
     const inputNome = document.getElementById("nome");
@@ -107,11 +144,7 @@
       lista.innerHTML = "";
       links.forEach(item => {
         const li = document.createElement("li");
-        li.innerHTML = `
-          <a href="${item.url}" target="_self">
-            ▶ ${item.nome}
-          </a>
-        `;
+        li.innerHTML = `<a href="${item.url}" target="_self">▶ ${item.nome}</a>`;
         lista.appendChild(li);
       });
     }
@@ -119,8 +152,7 @@
     render();
 
     if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("./service-worker.js")
-        .then(() => console.log("Service Worker registrado"));
+      navigator.serviceWorker.register("./service-worker.js");
     }
   </script>
 
