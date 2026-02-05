@@ -6,27 +6,59 @@
 <title>YouTube</title>
 
 <style>
+*{box-sizing:border-box}
 body{
   margin:0;
-  font-family: system-ui, Arial;
+  font-family:system-ui, Arial;
   background:#f9f9f9;
 }
 
+/* animações premium */
+.fade{animation:fade .4s ease}
+.slide{animation:slide .4s ease}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes slide{from{transform:translateY(20px);opacity:0}to{transform:none;opacity:1}}
+
 /* ===== TELA FAKE ===== */
 #fake{
-  height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-direction:column;
+  min-height:100vh;
+  padding:20px;
 }
-
-#fake input{
+.fake-title{
+  text-align:center;
+  color:#ff0000;
+  font-size:32px;
+  font-weight:700;
+  margin:40px 0 20px;
+}
+.fake-search{
+  display:flex;
+  margin-bottom:20px;
+}
+.fake-search input{
+  flex:1;
   padding:14px;
-  width:70%;
   border-radius:30px;
   border:1px solid #ccc;
   font-size:16px;
+}
+
+/* cards fake */
+.card{
+  background:white;
+  border-radius:16px;
+  overflow:hidden;
+  margin-bottom:16px;
+  box-shadow:0 4px 10px rgba(0,0,0,.12);
+}
+.card iframe{
+  width:100%;
+  height:200px;
+}
+.card p{
+  padding:10px;
+  margin:0;
+  font-weight:500;
 }
 
 /* ===== APP SECRETO ===== */
@@ -34,13 +66,14 @@ body{
   display:none;
   padding:16px;
 }
-
-h1{
+.app-title{
   text-align:center;
   color:#ff0000;
+  font-size:30px;
+  margin-bottom:12px;
 }
 
-/* busca */
+/* busca interna */
 .search-box{
   display:flex;
   margin-bottom:14px;
@@ -71,28 +104,15 @@ h1{
   border-radius:20px;
   border:none;
   background:#eee;
+  font-weight:600;
 }
 .tab.active{
   background:#ff0000;
   color:white;
 }
-
-/* cards */
-.card{
-  background:white;
-  border-radius:16px;
-  overflow:hidden;
-  margin-bottom:16px;
-  box-shadow:0 2px 6px rgba(0,0,0,.1);
-}
-.card iframe, .card video{
+video{
   width:100%;
-  height:200px;
-}
-.card p{
-  padding:10px;
-  margin:0;
-  font-weight:500;
+  border-radius:12px;
 }
 </style>
 </head>
@@ -100,56 +120,64 @@ h1{
 <body>
 
 <!-- ===== TELA FAKE ===== -->
-<div id="fake">
-  <input id="busca" placeholder="Pesquisar no YouTube">
-</div>
+<div id="fake" class="fade">
+  <div class="fake-title">YouTube</div>
 
-<!-- ===== APP SECRETO ===== -->
-<div id="app">
-
-<h1>YouTube</h1>
-
-<div class="search-box">
-  <input id="searchApp" placeholder="Pesquisar no YouTube">
-  <button onclick="buscar()">🔍</button>
-</div>
-
-<div class="tabs">
-  <button class="tab active" onclick="mostrar('inicio')">Início</button>
-  <button class="tab" onclick="mostrar('meus')">Meus Vídeos</button>
-</div>
-
-<!-- INÍCIO -->
-<div id="inicio">
-  <div class="card">
-    <iframe src="https://www.youtube.com/embed/7D4Tfab_X4k"
-      allowfullscreen></iframe>
-    <p>Palmeiras busca virada</p>
+  <div class="fake-search">
+    <input id="busca" placeholder="Pesquisar no YouTube">
   </div>
 
-  <div class="card">
-    <iframe src="https://www.youtube.com/embed/uiyQDQxvCqU"
-      allowfullscreen></iframe>
+  <!-- vídeos recomendados fake -->
+  <div class="card slide">
+    <iframe src="https://www.youtube.com/embed/7D4Tfab_X4k" allowfullscreen></iframe>
+    <p>Palmeiras busca virada épica</p>
+  </div>
+
+  <div class="card slide">
+    <iframe src="https://www.youtube.com/embed/uiyQDQxvCqU" allowfullscreen></iframe>
     <p>Palmeiras 4x3 Flamengo</p>
   </div>
 </div>
 
-<!-- MEUS VÍDEOS -->
-<div id="meus" style="display:none">
-  <div class="card">
-    <video controls>
-      <source src="video.mp4" type="video/mp4">
-    </video>
-    <p>Meu vídeo secreto</p>
+<!-- ===== APP SECRETO ===== -->
+<div id="app" class="fade">
+
+  <div class="app-title">YouTube</div>
+
+  <div class="search-box">
+    <input id="searchApp" placeholder="Pesquisar no YouTube">
+    <button onclick="buscar()">🔍</button>
   </div>
-</div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="mostrar('inicio', this)">Início</button>
+    <button class="tab" onclick="mostrar('meus', this)">Meus Vídeos</button>
+  </div>
+
+  <!-- INÍCIO -->
+  <div id="inicio" class="slide">
+    <div class="card">
+      <iframe src="https://www.youtube.com/embed/Z8YtuRj5p20" allowfullscreen></iframe>
+      <p>Botafogo 3x4 Palmeiras</p>
+    </div>
+  </div>
+
+  <!-- MEUS VÍDEOS -->
+  <div id="meus" style="display:none" class="slide">
+    <div class="card">
+      <video controls>
+        <source src="video.mp4" type="video/mp4">
+      </video>
+      <p>Vídeo secreto</p>
+    </div>
+  </div>
 
 </div>
 
 <script>
 const PALAVRA_SECRETA = "bolsonaro";
 
-document.getElementById("busca").addEventListener("keydown", e=>{
+busca.addEventListener("keydown", e=>{
   if(e.key==="Enter"){
     if(e.target.value.toLowerCase() === PALAVRA_SECRETA){
       fake.style.display="none";
@@ -162,20 +190,19 @@ document.getElementById("busca").addEventListener("keydown", e=>{
   }
 });
 
-function mostrar(id){
-  document.getElementById("inicio").style.display="none";
-  document.getElementById("meus").style.display="none";
+function mostrar(id, btn){
+  inicio.style.display="none";
+  meus.style.display="none";
   document.getElementById(id).style.display="block";
 
   document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-  event.target.classList.add("active");
+  btn.classList.add("active");
 }
 
 function buscar(){
-  const q = searchApp.value;
   window.location.href =
     "https://www.youtube.com/results?search_query=" +
-    encodeURIComponent(q);
+    encodeURIComponent(searchApp.value);
 }
 </script>
 
