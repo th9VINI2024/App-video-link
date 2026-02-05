@@ -5,9 +5,8 @@
   <title>YouTube</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#ffffff">
+  <meta name="theme-color" content="#ff0000">
   <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#ff0000">
 
   <style>
     body {
@@ -67,23 +66,12 @@
       max-width: 380px;
     }
 
-    .recomendados h3 {
-      font-size: 16px;
-      margin-bottom: 10px;
-      color: #333;
-    }
-
-    .videos {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
     .videos iframe {
       width: 100%;
       height: 200px;
       border-radius: 12px;
       border: none;
+      margin-bottom: 12px;
     }
 
     /* APP REAL */
@@ -94,25 +82,47 @@
       padding: 16px;
     }
 
-    .app input, .app button {
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .tabs button {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      background: #eee;
+      font-weight: 600;
+    }
+
+    .tabs button.active {
+      background: #ff0000;
+      color: #fff;
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    input, button {
       width: 100%;
       padding: 12px;
       border-radius: 8px;
       border: 1px solid #ccc;
+      margin-bottom: 8px;
       font-size: 15px;
     }
 
-    .app input {
-      margin-bottom: 8px;
-      background: #fff;
-      color: #000;
-    }
-
-    .app button {
+    button.main {
       background: #ff0000;
       color: #fff;
       border: none;
-      margin-bottom: 12px;
       cursor: pointer;
     }
 
@@ -128,97 +138,107 @@
       margin-bottom: 10px;
       border: 1px solid #ddd;
     }
-
-    a {
-      color: #000;
-      text-decoration: none;
-      display: block;
-      font-weight: 500;
-    }
   </style>
 </head>
 <body>
 
-  <!-- TELA DISFARÇADA -->
-  <div class="fake" id="fake">
-    <div class="logo">YouTube</div>
+<!-- TELA DISFARÇADA -->
+<div class="fake" id="fake">
+  <div class="logo">YouTube</div>
 
-    <div class="search-box">
-      <input id="busca" placeholder="Pesquisar no YouTube">
-      <button onclick="pesquisar()">🔍</button>
-    </div>
-
-    <!-- VÍDEOS RECOMENDADOS -->
-    <div class="recomendados">
-      <h3>Vídeos recomendados</h3>
-
-      <div class="videos">
-        <iframe src="https://www.youtube.com/embed/7D4Tfab_X4k" allowfullscreen></iframe>
-        <iframe src="https://www.youtube.com/embed/uiyQDQxvCqU" allowfullscreen></iframe>
-        <iframe src="https://www.youtube.com/embed/Z8YtuRj5p20" allowfullscreen></iframe>
-      </div>
-    </div>
+  <div class="search-box">
+    <input id="busca" placeholder="Pesquisar no YouTube">
+    <button onclick="pesquisar()">🔍</button>
   </div>
 
-  <!-- APP REAL -->
-  <div class="app" id="app">
+  <div class="recomendados">
+    <iframe src="https://www.youtube.com/embed/7D4Tfab_X4k"></iframe>
+    <iframe src="https://www.youtube.com/embed/uiyQDQxvCqU"></iframe>
+    <iframe src="https://www.youtube.com/embed/Z8YtuRj5p20"></iframe>
+  </div>
+</div>
+
+<!-- APP SECRETO -->
+<div class="app" id="app">
+
+  <div class="tabs">
+    <button id="tabCofre" class="active" onclick="abrirAba('cofre')">📁 Cofre</button>
+    <button id="tabDownload" onclick="abrirAba('download')">📥 Downloads</button>
+  </div>
+
+  <!-- COFRE -->
+  <div id="cofre" class="section active">
     <input id="nome" placeholder="Nome do vídeo">
-    <input id="link" placeholder="Cole o link aqui">
-    <button onclick="salvar()">Adicionar</button>
+    <input id="link" placeholder="Cole o link">
+    <button class="main" onclick="salvar()">Adicionar</button>
     <ul id="lista"></ul>
   </div>
 
-  <script>
-    const PALAVRA_SECRETA = "veiga";
+  <!-- DOWNLOAD -->
+  <div id="download" class="section">
+    <input id="downloadLink" placeholder="Link direto do vídeo (.mp4)">
+    <button class="main" onclick="baixarVideo()">Baixar vídeo</button>
+    <p id="downloadMsg"></p>
+  </div>
 
-    function pesquisar() {
-      const texto = document.getElementById("busca").value.trim().toLowerCase();
+</div>
 
-      if (texto === PALAVRA_SECRETA) {
-        document.getElementById("fake").style.display = "none";
-        document.getElementById("app").style.display = "block";
-      } else {
-        window.location.href =
-          "https://www.youtube.com/results?search_query=" +
-          encodeURIComponent(texto);
-      }
+<script>
+  const PALAVRA_SECRETA = "veiga";
+
+  function pesquisar() {
+    const texto = busca.value.trim().toLowerCase();
+    if (texto === PALAVRA_SECRETA) {
+      fake.style.display = "none";
+      app.style.display = "block";
+    } else {
+      window.location.href =
+        "https://www.youtube.com/results?search_query=" +
+        encodeURIComponent(texto);
     }
+  }
 
-    // 📦 COFRE DE LINKS
-    const lista = document.getElementById("lista");
-    const inputLink = document.getElementById("link");
-    const inputNome = document.getElementById("nome");
+  function abrirAba(nome) {
+    document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+    document.querySelectorAll(".tabs button").forEach(b => b.classList.remove("active"));
 
-    let links = JSON.parse(localStorage.getItem("cofreLinks")) || [];
+    document.getElementById(nome).classList.add("active");
+    document.getElementById("tab" + nome.charAt(0).toUpperCase() + nome.slice(1)).classList.add("active");
+  }
 
-    function salvar() {
-      const url = inputLink.value.trim();
-      const nome = inputNome.value.trim();
-      if (!url || !nome) return;
+  // COFRE
+  let links = JSON.parse(localStorage.getItem("cofreLinks")) || [];
 
-      links.push({ nome, url });
-      localStorage.setItem("cofreLinks", JSON.stringify(links));
-
-      inputLink.value = "";
-      inputNome.value = "";
-      render();
-    }
-
-    function render() {
-      lista.innerHTML = "";
-      links.forEach(item => {
-        const li = document.createElement("li");
-        li.innerHTML = `<a href="${item.url}" target="_self">▶ ${item.nome}</a>`;
-        lista.appendChild(li);
-      });
-    }
-
+  function salvar() {
+    links.push({ nome: nome.value, url: link.value });
+    localStorage.setItem("cofreLinks", JSON.stringify(links));
+    nome.value = "";
+    link.value = "";
     render();
+  }
 
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("./service-worker.js");
-    }
-  </script>
+  function render() {
+    lista.innerHTML = "";
+    links.forEach(i => {
+      lista.innerHTML += `<li><a href="${i.url}">▶ ${i.nome}</a></li>`;
+    });
+  }
+  render();
+
+  // DOWNLOAD
+  function baixarVideo() {
+    const a = document.createElement("a");
+    a.href = downloadLink.value;
+    a.download = "";
+    a.target = "_blank";
+    a.click();
+    downloadMsg.innerText = "Download iniciado 📥";
+  }
+
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("./service-worker.js");
+  }
+</script>
 
 </body>
 </html>
