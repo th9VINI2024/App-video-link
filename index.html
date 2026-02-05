@@ -37,6 +37,10 @@
       max-width: 380px;
       display: flex;
       margin-bottom: 20px;
+
+      /* 🔧 CORREÇÃO DO BUG */
+      position: relative;
+      z-index: 10;
     }
 
     .search-box input {
@@ -66,12 +70,14 @@
       max-width: 380px;
     }
 
+    /* 🔧 IFRAME NÃO ROUBA TOQUE */
     .recomendados iframe {
       width: 100%;
       height: 200px;
       border-radius: 12px;
       border: none;
       margin-bottom: 12px;
+      pointer-events: none;
     }
 
     /* APP REAL */
@@ -146,9 +152,16 @@
 <div class="fake" id="fake">
   <div class="logo">YouTube</div>
 
+  <!-- 🔧 SEARCH CORRIGIDA -->
   <form class="search-box" onsubmit="pesquisar(event)">
-  <input id="busca" type="search" placeholder="Pesquisar no YouTube" autocomplete="off">
-  <button type="submit">🔍</button>
+    <input
+      id="busca"
+      type="search"
+      placeholder="Pesquisar no YouTube"
+      autocomplete="off"
+      inputmode="search"
+    >
+    <button type="submit">🔍</button>
   </form>
 
   <div class="recomendados">
@@ -166,7 +179,6 @@
     <button id="tabDownload" onclick="abrirAba('download')">📥 Downloads</button>
   </div>
 
-  <!-- COFRE -->
   <div id="cofre" class="section active">
     <input id="nome" placeholder="Nome do vídeo">
     <input id="link" placeholder="Cole o link">
@@ -174,7 +186,6 @@
     <ul id="lista"></ul>
   </div>
 
-  <!-- DOWNLOAD -->
   <div id="download" class="section">
     <input id="downloadLink" placeholder="Link direto do vídeo (.mp4)">
     <button class="main" onclick="baixarVideo()">Baixar vídeo</button>
@@ -191,7 +202,6 @@
 
     const input = document.getElementById("busca");
     const texto = input.value.trim().toLowerCase();
-
     if (!texto) return;
 
     if (texto === PALAVRA_SECRETA) {
@@ -204,18 +214,10 @@
         encodeURIComponent(texto);
     }
   }
-  
- // ENTER FUNCIONA 🔥
-  document.getElementById("busca").addEventListener("keydown", function (e) {
-    if (e.key === "Enter") {
-      pesquisar();
-    }
-  });
 
   function abrirAba(nome) {
     document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
     document.querySelectorAll(".tabs button").forEach(b => b.classList.remove("active"));
-
     document.getElementById(nome).classList.add("active");
     document.getElementById("tab" + nome.charAt(0).toUpperCase() + nome.slice(1)).classList.add("active");
   }
