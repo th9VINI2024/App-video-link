@@ -116,24 +116,38 @@ button.main {
 }
 
 ul { list-style: none; padding: 0; }
-
+  
 li {
   background: #fff;
   padding: 12px;
   border-radius: 10px;
   margin-bottom: 10px;
   border: 1px solid #ddd;
+}
 
-  .search-box input {
-  width: auto !important;
-  flex: 1 !important;
-  margin-bottom: 0 !important;
+/* CORREÇÃO DA BARRA DE PESQUISA */
+.search-box {
+  position: relative;
+  z-index: 9999;
+}
+
+.search-box input {
+  width: auto;
+  flex: 1;
+  margin-bottom: 0;
 }
 
 .search-box button {
-  width: auto !important;
-  margin-bottom: 0 !important;
+  width: auto;
+  margin-bottom: 0;
 }
+
+/* IFRAME NÃO ROUBA TOQUE */
+.recomendados iframe {
+  pointer-events: none;
+}
+
+  
 </style>
 </head>
 
