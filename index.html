@@ -186,9 +186,12 @@
 <script>
   const PALAVRA_SECRETA = "veiga";
 
-  function pesquisar() {
+  function pesquisar(e) {
+    if (e) e.preventDefault();
+
     const input = document.getElementById("busca");
     const texto = input.value.trim().toLowerCase();
+
     if (!texto) return;
 
     if (texto === PALAVRA_SECRETA) {
@@ -201,8 +204,8 @@
         encodeURIComponent(texto);
     }
   }
-
-  // ENTER FUNCIONA 🔥
+  
+ // ENTER FUNCIONA 🔥
   document.getElementById("busca").addEventListener("keydown", function (e) {
     if (e.key === "Enter") {
       pesquisar();
