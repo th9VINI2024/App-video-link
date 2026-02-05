@@ -39,8 +39,9 @@
       margin-bottom: 20px;
 
       /* 🔧 CORREÇÃO DO BUG */
-      position: relative;
-      z-index: 10;
+  position: relative;
+  z-index: 9999; /* muito acima para garantir o foco */
+      }
     }
 
     .search-box input {
