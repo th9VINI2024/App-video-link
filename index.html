@@ -146,10 +146,10 @@
 <div class="fake" id="fake">
   <div class="logo">YouTube</div>
 
-  <div class="search-box">
-    <input id="busca" placeholder="Pesquisar no YouTube">
-    <button type="button" onclick="pesquisar()">🔍</button>
-  </div>
+  <form class="search-box" onsubmit="pesquisar(event)">
+  <input id="busca" type="search" placeholder="Pesquisar no YouTube" autocomplete="off">
+  <button type="submit">🔍</button>
+  </form>
 
   <div class="recomendados">
     <iframe src="https://www.youtube.com/embed/7D4Tfab_X4k"></iframe>
