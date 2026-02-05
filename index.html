@@ -1,167 +1,141 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>YouTube</title>
+<meta charset="UTF-8">
+<title>YouTube</title>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#ff0000">
-  <link rel="manifest" href="manifest.json">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#ff0000">
+<link rel="manifest" href="manifest.json">
 
-  <style>
-    body {
-      margin: 0;
-      font-family: system-ui, Arial, sans-serif;
-      background: #f9f9f9;
-      color: #000;
-    }
+<style>
+body{
+  margin:0;
+  font-family:system-ui,Arial,sans-serif;
+  background:#f9f9f9;
+}
 
-    /* TELA FAKE */
-    .fake {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding-top: 80px;
-      min-height: 100vh;
-    }
+/* TELA FAKE */
+.fake{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding-top:80px;
+  min-height:100vh;
+}
 
-    .logo {
-      color: #ff0000;
-      font-size: 36px;
-      font-weight: bold;
-      margin-bottom: 20px;
-    }
+.logo{
+  color:#ff0000;
+  font-size:36px;
+  font-weight:bold;
+  margin-bottom:20px;
+}
 
-    .search-box {
-      width: 85%;
-      max-width: 380px;
-      display: flex;
-      margin-bottom: 20px;
+.search-box{
+  width:85%;
+  max-width:380px;
+  display:flex;
+  margin-bottom:20px;
+  position:relative;
+  z-index:9999;
+}
 
-      /* 🔧 CORREÇÃO DO BUG */
-  position: relative;
-  z-index: 9999; /* muito acima para garantir o foco */
-      }
-    }
+.search-box input{
+  flex:1;
+  padding:12px;
+  border-radius:20px 0 0 20px;
+  border:1px solid #ccc;
+  font-size:16px;
+}
 
-    .search-box input {
-      flex: 1;
-      padding: 12px;
-      border-radius: 20px 0 0 20px;
-      border: 1px solid #ccc;
-      font-size: 16px;
-      outline: none;
-      background: #fff;
-      color: #000;
-    }
+.search-box button{
+  padding:12px 16px;
+  border-radius:0 20px 20px 0;
+  border:none;
+  background:#ff0000;
+  color:#fff;
+  font-size:16px;
+}
 
-    .search-box button {
-      padding: 12px 16px;
-      border-radius: 0 20px 20px 0;
-      border: none;
-      background: #ff0000;
-      color: #fff;
-      font-size: 16px;
-      cursor: pointer;
-    }
+/* RECOMENDADOS */
+.recomendados{
+  width:90%;
+  max-width:380px;
+}
 
-    /* RECOMENDADOS */
-    .recomendados {
-      width: 90%;
-      max-width: 380px;
-    }
+.recomendados iframe{
+  width:100%;
+  height:200px;
+  border-radius:12px;
+  margin-bottom:12px;
+  pointer-events:none;
+}
 
-    /* 🔧 IFRAME NÃO ROUBA TOQUE */
-    .recomendados iframe {
-      width: 100%;
-      height: 200px;
-      border-radius: 12px;
-      border: none;
-      margin-bottom: 12px;
-      pointer-events: none;
-    }
+/* APP REAL */
+.app{
+  display:none;
+  max-width:420px;
+  margin:auto;
+  padding:16px;
+}
 
-    /* APP REAL */
-    .app {
-      display: none;
-      max-width: 420px;
-      margin: auto;
-      padding: 16px;
-    }
+.tabs{
+  display:flex;
+  gap:10px;
+  margin-bottom:12px;
+}
 
-    .tabs {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
+.tabs button{
+  flex:1;
+  padding:10px;
+  border:none;
+  border-radius:8px;
+  background:#eee;
+  font-weight:600;
+}
 
-    .tabs button {
-      flex: 1;
-      padding: 10px;
-      border: none;
-      border-radius: 8px;
-      background: #eee;
-      font-weight: 600;
-    }
+.tabs button.active{
+  background:#ff0000;
+  color:#fff;
+}
 
-    .tabs button.active {
-      background: #ff0000;
-      color: #fff;
-    }
+.section{display:none;}
+.section.active{display:block;}
 
-    .section {
-      display: none;
-    }
+input,button{
+  width:100%;
+  padding:12px;
+  border-radius:8px;
+  border:1px solid #ccc;
+  margin-bottom:8px;
+}
 
-    .section.active {
-      display: block;
-    }
+button.main{
+  background:#ff0000;
+  color:#fff;
+  border:none;
+}
 
-    input, button {
-      width: 100%;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      margin-bottom: 8px;
-      font-size: 15px;
-    }
-
-    button.main {
-      background: #ff0000;
-      color: #fff;
-      border: none;
-      cursor: pointer;
-    }
-
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    li {
-      background: #fff;
-      padding: 12px;
-      border-radius: 10px;
-      margin-bottom: 10px;
-      border: 1px solid #ddd;
-    }
-  </style>
+ul{list-style:none;padding:0;}
+li{
+  background:#fff;
+  padding:12px;
+  border-radius:10px;
+  margin-bottom:10px;
+  border:1px solid #ddd;
+  cursor:pointer;
+}
+</style>
 </head>
+
 <body>
 
-<!-- TELA DISFARÇADA -->
+<!-- TELA FAKE -->
 <div class="fake" id="fake">
   <div class="logo">YouTube</div>
 
-  <!-- 🔧 SEARCH CORRIGIDA -->
   <form class="search-box" onsubmit="pesquisar(event)">
-    <input
-      id="busca"
-      type="search"
-      placeholder="Pesquisar no YouTube"
-      autocomplete="off"
-      inputmode="search"
-    >
+    <input id="busca" type="search" placeholder="Pesquisar no YouTube" autocomplete="off" tabindex="1">
     <button type="submit">🔍</button>
   </form>
 
@@ -175,86 +149,114 @@
 <!-- APP SECRETO -->
 <div class="app" id="app">
 
-  <div class="tabs">
-    <button id="tabCofre" class="active" onclick="abrirAba('cofre')">📁 Cofre</button>
-    <button id="tabDownload" onclick="abrirAba('download')">📥 Downloads</button>
-  </div>
+<div class="tabs">
+  <button id="tabCofre" class="active" onclick="abrirAba('cofre')">📁 Cofre</button>
+  <button id="tabDownload" onclick="abrirAba('download')">📥 Downloads</button>
+  <button id="tabVideos" onclick="abrirAba('videos')">🎬 Meus Vídeos</button>
+</div>
 
-  <div id="cofre" class="section active">
-    <input id="nome" placeholder="Nome do vídeo">
-    <input id="link" placeholder="Cole o link">
-    <button class="main" onclick="salvar()">Adicionar</button>
-    <ul id="lista"></ul>
-  </div>
+<div id="cofre" class="section active">
+  <input id="nome" placeholder="Nome do vídeo">
+  <input id="link" placeholder="Cole o link">
+  <button class="main" onclick="salvar()">Adicionar</button>
+  <ul id="lista"></ul>
+</div>
 
-  <div id="download" class="section">
-    <input id="downloadLink" placeholder="Link direto do vídeo (.mp4)">
-    <button class="main" onclick="baixarVideo()">Baixar vídeo</button>
-    <p id="downloadMsg"></p>
-  </div>
+<div id="download" class="section">
+  <input id="downloadLink" placeholder="Link direto (.mp4)">
+  <button class="main" onclick="baixarVideo()">Baixar vídeo</button>
+  <p id="downloadMsg"></p>
+</div>
+
+<div id="videos" class="section">
+  <ul id="listaVideos"></ul>
+</div>
 
 </div>
 
 <script>
-  const PALAVRA_SECRETA = "veiga";
+const PALAVRA_SECRETA="veiga";
 
-  function pesquisar(e) {
-    if (e) e.preventDefault();
+/* BUSCA */
+function pesquisar(e){
+  e.preventDefault();
+  const texto=busca.value.trim().toLowerCase();
+  if(!texto) return;
 
-    const input = document.getElementById("busca");
-    const texto = input.value.trim().toLowerCase();
-    if (!texto) return;
-
-    if (texto === PALAVRA_SECRETA) {
-      document.getElementById("fake").style.display = "none";
-      document.getElementById("app").style.display = "block";
-      input.value = "";
-    } else {
-      window.location.href =
-        "https://www.youtube.com/results?search_query=" +
-        encodeURIComponent(texto);
-    }
+  if(texto===PALAVRA_SECRETA){
+    fake.style.display="none";
+    app.style.display="block";
+    busca.value="";
+  }else{
+    window.location.href="https://www.youtube.com/results?search_query="+encodeURIComponent(texto);
   }
+}
 
-  function abrirAba(nome) {
-    document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
-    document.querySelectorAll(".tabs button").forEach(b => b.classList.remove("active"));
-    document.getElementById(nome).classList.add("active");
-    document.getElementById("tab" + nome.charAt(0).toUpperCase() + nome.slice(1)).classList.add("active");
-  }
+/* ABAS */
+function abrirAba(nome){
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active"));
+  document.getElementById(nome).classList.add("active");
+  document.getElementById("tab"+nome.charAt(0).toUpperCase()+nome.slice(1)).classList.add("active");
+}
 
-  let links = JSON.parse(localStorage.getItem("cofreLinks")) || [];
+/* COFRE */
+let links=JSON.parse(localStorage.getItem("cofreLinks"))||[];
 
-  function salvar() {
-    if (!nome.value || !link.value) return;
-    links.push({ nome: nome.value, url: link.value });
-    localStorage.setItem("cofreLinks", JSON.stringify(links));
-    nome.value = "";
-    link.value = "";
-    render();
-  }
-
-  function render() {
-    lista.innerHTML = "";
-    links.forEach(i => {
-      lista.innerHTML += `<li><a href="${i.url}">▶ ${i.nome}</a></li>`;
-    });
-  }
+function salvar(){
+  if(!nome.value||!link.value) return;
+  links.push({nome:nome.value,url:link.value});
+  localStorage.setItem("cofreLinks",JSON.stringify(links));
+  nome.value="";link.value="";
   render();
+}
 
-  function baixarVideo() {
-    if (!downloadLink.value) return;
-    const a = document.createElement("a");
-    a.href = downloadLink.value;
-    a.download = "";
-    a.target = "_blank";
-    a.click();
-    downloadMsg.innerText = "Download iniciado 📥";
-  }
+function render(){
+  lista.innerHTML="";
+  links.forEach(i=>{
+    lista.innerHTML+=`<li onclick="abrirVideo('${i.url}')">▶ ${i.nome}</li>`;
+  });
+}
+render();
 
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("./service-worker.js");
-  }
+/* MEUS VÍDEOS */
+let meusVideos=JSON.parse(localStorage.getItem("meusVideos"))||[];
+
+function salvarVideo(url){
+  meusVideos.push({nome:"Vídeo "+meusVideos.length,url});
+  localStorage.setItem("meusVideos",JSON.stringify(meusVideos));
+  renderVideos();
+}
+
+function renderVideos(){
+  listaVideos.innerHTML="";
+  meusVideos.forEach(v=>{
+    listaVideos.innerHTML+=`<li onclick="abrirVideo('${v.url}')">▶ ${v.nome}</li>`;
+  });
+}
+renderVideos();
+
+/* PLAYER */
+function abrirVideo(url){
+  const p=document.createElement("div");
+  p.style="position:fixed;inset:0;background:#000;z-index:9999";
+  p.innerHTML=`<video src="${url}" controls autoplay style="width:100%;height:100%"></video>
+  <button onclick="this.parentElement.remove()" style="position:absolute;top:10px;right:10px">✖</button>`;
+  document.body.appendChild(p);
+}
+
+/* DOWNLOAD */
+function baixarVideo(){
+  if(!downloadLink.value) return;
+  salvarVideo(downloadLink.value);
+  const a=document.createElement("a");
+  a.href=downloadLink.value;
+  a.download="";
+  a.target="_blank";
+  a.click();
+  downloadMsg.innerText="Salvo em Meus Vídeos 🎬";
+  downloadLink.value="";
+}
 </script>
 
 </body>
