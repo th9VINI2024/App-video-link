@@ -1,209 +1,223 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>YouTube</title>
+  <meta charset="UTF-8">
+  <title>YouTube</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#ff0000">
 
-<style>
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:system-ui, Arial;
-  background:#f9f9f9;
-}
+  <style>
+    * { box-sizing: border-box; font-family: Arial, sans-serif; }
+    body { margin:0; background:#fff; }
 
-/* animações premium */
-.fade{animation:fade .4s ease}
-.slide{animation:slide .4s ease}
-@keyframes fade{from{opacity:0}to{opacity:1}}
-@keyframes slide{from{transform:translateY(20px);opacity:0}to{transform:none;opacity:1}}
+    header {
+      padding:16px;
+      text-align:center;
+      font-size:32px;
+      font-weight:bold;
+      color:#ff0000;
+    }
 
-/* ===== TELA FAKE ===== */
-#fake{
-  min-height:100vh;
-  padding:20px;
-}
-.fake-title{
-  text-align:center;
-  color:#ff0000;
-  font-size:32px;
-  font-weight:700;
-  margin:40px 0 20px;
-}
-.fake-search{
-  display:flex;
-  margin-bottom:20px;
-}
-.fake-search input{
-  flex:1;
-  padding:14px;
-  border-radius:30px;
-  border:1px solid #ccc;
-  font-size:16px;
-}
+    .search-box {
+      display:flex;
+      margin:0 16px 16px;
+      border-radius:30px;
+      overflow:hidden;
+      border:1px solid #ddd;
+      animation: fadeIn .4s ease;
+    }
 
-/* cards fake */
-.card{
-  background:white;
-  border-radius:16px;
-  overflow:hidden;
-  margin-bottom:16px;
-  box-shadow:0 4px 10px rgba(0,0,0,.12);
-}
-.card iframe{
-  width:100%;
-  height:200px;
-}
-.card p{
-  padding:10px;
-  margin:0;
-  font-weight:500;
-}
+    .search-box input {
+      flex:1;
+      padding:14px;
+      border:none;
+      outline:none;
+      font-size:16px;
+    }
 
-/* ===== APP SECRETO ===== */
-#app{
-  display:none;
-  padding:16px;
-}
-.app-title{
-  text-align:center;
-  color:#ff0000;
-  font-size:30px;
-  margin-bottom:12px;
-}
+    .search-box button {
+      background:#ff0000;
+      border:none;
+      width:60px;
+      color:#fff;
+      font-size:18px;
+    }
 
-/* busca interna */
-.search-box{
-  display:flex;
-  margin-bottom:14px;
-}
-.search-box input{
-  flex:1;
-  padding:12px;
-  border-radius:25px 0 0 25px;
-  border:1px solid #ccc;
-}
-.search-box button{
-  background:#ff0000;
-  color:white;
-  border:none;
-  padding:12px 18px;
-  border-radius:0 25px 25px 0;
-}
+    .tabs {
+      display:flex;
+      gap:10px;
+      padding:0 16px 16px;
+    }
 
-/* abas */
-.tabs{
-  display:flex;
-  gap:10px;
-  margin-bottom:14px;
-}
-.tab{
-  flex:1;
-  padding:10px;
-  border-radius:20px;
-  border:none;
-  background:#eee;
-  font-weight:600;
-}
-.tab.active{
-  background:#ff0000;
-  color:white;
-}
-video{
-  width:100%;
-  border-radius:12px;
-}
-</style>
+    .tab {
+      flex:1;
+      padding:10px;
+      border-radius:20px;
+      border:none;
+      font-weight:bold;
+      background:#f1f1f1;
+    }
+
+    .tab.active {
+      background:#ff0000;
+      color:#fff;
+    }
+
+    .content { padding:0 16px 30px; }
+
+    .card {
+      background:#fff;
+      border-radius:16px;
+      box-shadow:0 8px 20px rgba(0,0,0,.12);
+      margin-bottom:20px;
+      overflow:hidden;
+      animation: slideUp .4s ease;
+    }
+
+    .thumb {
+      position:relative;
+    }
+
+    .thumb img {
+      width:100%;
+      display:block;
+    }
+
+    .play {
+      position:absolute;
+      top:50%;
+      left:50%;
+      transform:translate(-50%,-50%);
+      background:#ff0000;
+      color:#fff;
+      border-radius:50%;
+      width:60px;
+      height:60px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:24px;
+    }
+
+    .card h3 {
+      padding:12px;
+      font-size:16px;
+    }
+
+    iframe {
+      width:100%;
+      height:220px;
+      border:none;
+      border-radius:16px;
+      margin-bottom:20px;
+    }
+
+    #secretApp { display:none; }
+
+    @keyframes fadeIn {
+      from { opacity:0; }
+      to { opacity:1; }
+    }
+
+    @keyframes slideUp {
+      from { transform:translateY(20px); opacity:0; }
+      to { transform:translateY(0); opacity:1; }
+    }
+  </style>
 </head>
 
 <body>
 
-<!-- ===== TELA FAKE ===== -->
-<div id="fake" class="fade">
-  <div class="fake-title">YouTube</div>
+<!-- TELA FAKE -->
+<div id="fakeApp">
+  <header>YouTube</header>
 
-  <div class="fake-search">
-    <input id="busca" placeholder="Pesquisar no YouTube">
+  <div class="search-box">
+    <input id="searchInput" placeholder="Pesquisar no YouTube">
+    <button onclick="handleSearch()">🔍</button>
   </div>
 
-  <!-- vídeos recomendados fake -->
-  <div class="card slide">
-    <iframe src="https://www.youtube.com/embed/7D4Tfab_X4k" allowfullscreen></iframe>
-    <p>Palmeiras busca virada épica</p>
-  </div>
+  <div class="content">
+    <!-- vídeos fake recomendados -->
+    <div class="card">
+      <div class="thumb">
+        <img src="https://img.youtube.com/vi/7D4Tfab_X4k/maxresdefault.jpg">
+        <div class="play">▶</div>
+      </div>
+      <h3>Palmeiras busca virada épica</h3>
+    </div>
 
-  <div class="card slide">
-    <iframe src="https://www.youtube.com/embed/uiyQDQxvCqU" allowfullscreen></iframe>
-    <p>Palmeiras 4x3 Flamengo</p>
+    <div class="card">
+      <div class="thumb">
+        <img src="https://img.youtube.com/vi/uiyQDQxvCqU/maxresdefault.jpg">
+        <div class="play">▶</div>
+      </div>
+      <h3>Palmeiras 4x3 Flamengo</h3>
+    </div>
   </div>
 </div>
 
-<!-- ===== APP SECRETO ===== -->
-<div id="app" class="fade">
-
-  <div class="app-title">YouTube</div>
-
-  <div class="search-box">
-    <input id="searchApp" placeholder="Pesquisar no YouTube">
-    <button onclick="buscar()">🔍</button>
-  </div>
+<!-- APP SECRETO -->
+<div id="secretApp">
+  <header>YouTube Premium</header>
 
   <div class="tabs">
-    <button class="tab active" onclick="mostrar('inicio', this)">Início</button>
-    <button class="tab" onclick="mostrar('meus', this)">Meus Vídeos</button>
+    <button class="tab active" onclick="showTab('inicio')">Início</button>
+    <button class="tab" onclick="showTab('meus')">Meus Vídeos</button>
   </div>
 
-  <!-- INÍCIO -->
-  <div id="inicio" class="slide">
-    <div class="card">
-      <iframe src="https://www.youtube.com/embed/Z8YtuRj5p20" allowfullscreen></iframe>
-      <p>Botafogo 3x4 Palmeiras</p>
-    </div>
+  <div class="content" id="inicio">
+    <iframe src="https://www.youtube.com/embed/7D4Tfab_X4k" allowfullscreen></iframe>
+    <iframe src="https://www.youtube.com/embed/uiyQDQxvCqU" allowfullscreen></iframe>
   </div>
 
-  <!-- MEUS VÍDEOS -->
-  <div id="meus" style="display:none" class="slide">
-    <div class="card">
-      <video controls>
-        <source src="video.mp4" type="video/mp4">
-      </video>
-      <p>Vídeo secreto</p>
-    </div>
+  <div class="content" id="meus" style="display:none;">
+    <div id="savedVideos"></div>
   </div>
-
 </div>
 
 <script>
-const PALAVRA_SECRETA = "bolsonaro";
+  const PASSWORD = "veiga";
 
-busca.addEventListener("keydown", e=>{
-  if(e.key==="Enter"){
-    if(e.target.value.toLowerCase() === PALAVRA_SECRETA){
-      fake.style.display="none";
-      app.style.display="block";
-    }else{
+  function handleSearch() {
+    const text = document.getElementById("searchInput").value.toLowerCase().trim();
+
+    if (text === PASSWORD) {
+      document.getElementById("fakeApp").style.display = "none";
+      document.getElementById("secretApp").style.display = "block";
+      loadSaved();
+    } else {
       window.location.href =
         "https://www.youtube.com/results?search_query=" +
-        encodeURIComponent(e.target.value);
+        encodeURIComponent(text);
     }
   }
-});
 
-function mostrar(id, btn){
-  inicio.style.display="none";
-  meus.style.display="none";
-  document.getElementById(id).style.display="block";
+  function showTab(tab) {
+    document.getElementById("inicio").style.display = tab === "inicio" ? "block" : "none";
+    document.getElementById("meus").style.display = tab === "meus" ? "block" : "none";
 
-  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-  btn.classList.add("active");
-}
+    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+    event.target.classList.add("active");
+  }
 
-function buscar(){
-  window.location.href =
-    "https://www.youtube.com/results?search_query=" +
-    encodeURIComponent(searchApp.value);
-}
+  function saveVideo(id) {
+    let vids = JSON.parse(localStorage.getItem("videos") || "[]");
+    vids.push(id);
+    localStorage.setItem("videos", JSON.stringify(vids));
+  }
+
+  function loadSaved() {
+    const box = document.getElementById("savedVideos");
+    box.innerHTML = "";
+    const vids = JSON.parse(localStorage.getItem("videos") || "[]");
+
+    vids.forEach(v => {
+      box.innerHTML += `
+        <iframe src="https://www.youtube.com/embed/${v}" allowfullscreen></iframe>
+      `;
+    });
+  }
 </script>
 
 </body>
