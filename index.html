@@ -66,7 +66,7 @@
       max-width: 380px;
     }
 
-    .videos iframe {
+    .recomendados iframe {
       width: 100%;
       height: 200px;
       border-radius: 12px;
@@ -148,7 +148,7 @@
 
   <div class="search-box">
     <input id="busca" placeholder="Pesquisar no YouTube">
-    <button onclick="pesquisar()">🔍</button>
+    <button type="button" onclick="pesquisar()">🔍</button>
   </div>
 
   <div class="recomendados">
@@ -187,16 +187,27 @@
   const PALAVRA_SECRETA = "veiga";
 
   function pesquisar() {
-    const texto = busca.value.trim().toLowerCase();
+    const input = document.getElementById("busca");
+    const texto = input.value.trim().toLowerCase();
+    if (!texto) return;
+
     if (texto === PALAVRA_SECRETA) {
-      fake.style.display = "none";
-      app.style.display = "block";
+      document.getElementById("fake").style.display = "none";
+      document.getElementById("app").style.display = "block";
+      input.value = "";
     } else {
       window.location.href =
         "https://www.youtube.com/results?search_query=" +
         encodeURIComponent(texto);
     }
   }
+
+  // ENTER FUNCIONA 🔥
+  document.getElementById("busca").addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+      pesquisar();
+    }
+  });
 
   function abrirAba(nome) {
     document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
@@ -206,10 +217,10 @@
     document.getElementById("tab" + nome.charAt(0).toUpperCase() + nome.slice(1)).classList.add("active");
   }
 
-  // COFRE
   let links = JSON.parse(localStorage.getItem("cofreLinks")) || [];
 
   function salvar() {
+    if (!nome.value || !link.value) return;
     links.push({ nome: nome.value, url: link.value });
     localStorage.setItem("cofreLinks", JSON.stringify(links));
     nome.value = "";
@@ -225,8 +236,8 @@
   }
   render();
 
-  // DOWNLOAD
   function baixarVideo() {
+    if (!downloadLink.value) return;
     const a = document.createElement("a");
     a.href = downloadLink.value;
     a.download = "";
